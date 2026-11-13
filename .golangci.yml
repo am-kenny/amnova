@@ -26,12 +26,12 @@ formatters:
   enable:
     - gofumpt # Enforce a stricter format than gofmt, while being backwards compatible.
     - goimports # Checks if the code and import statements are formatted according to the 'goimports' command.
-    
+
 
   settings:
     goimports:
       local-prefixes:
-        - github.com/am-kenny/ampulsar
+        - github.com/am-kenny/amnova
 
 issues:
   max-issues-per-linter: 0
