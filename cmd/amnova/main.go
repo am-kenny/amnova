@@ -7,21 +7,26 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/am-kenny/amnova/internal/config"
 	"github.com/am-kenny/amnova/internal/health"
 	"github.com/am-kenny/amnova/internal/httpapi"
 )
 
-const listenAddr = ":8080"
-
 func main() {
-	slog.Info("starting AmNova")
+	// Log as JSON from the start
+	slog.SetDefault(newLogger(slog.LevelInfo))
 
-	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
+	cfg, err := config.Load()
+	if err != nil {
+		slog.Error("config load failed", "err", err)
+		os.Exit(1)
+	}
+	slog.SetDefault(newLogger(cfg.Log.Level))
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	srv, err := httpapi.Listen(listenAddr, health.NewHandler())
+	srv, err := httpapi.Listen(cfg.Server.ListenAddr, health.NewHandler())
 	if err != nil {
 		slog.Error("server init failed", "err", err)
 		os.Exit(1)
@@ -33,5 +38,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	slog.Info("Shutting down")
+	slog.Info("shutting down")
+}
+
+func newLogger(level slog.Level) *slog.Logger {
+	return slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: level}))
 }
