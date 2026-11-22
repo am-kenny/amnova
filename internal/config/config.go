@@ -68,15 +68,33 @@ func (cnf *LogConfig) defaults() {
 	cnf.Level = slog.LevelInfo
 }
 
+type StorageConfig struct {
+	DataDir string
+}
+
+// fields returns list of fieldSpec, holding env definitions
+// and pointers into the StorageConfig for env loading
+func (cnf *StorageConfig) fields() []fieldSpec {
+	return []fieldSpec{
+		{"AMNOVA_DATA_DIR", parseString(&cnf.DataDir)},
+	}
+}
+
+func (cnf *StorageConfig) defaults() {
+	cnf.DataDir = "data"
+}
+
 type Config struct {
-	Server ServerConfig
-	Log    LogConfig
+	Server  ServerConfig
+	Log     LogConfig
+	Storage StorageConfig
 }
 
 func (cfg *Config) sections() []section {
 	return []section{
 		&cfg.Server,
 		&cfg.Log,
+		&cfg.Storage,
 	}
 }
 
