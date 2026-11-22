@@ -21,7 +21,7 @@ var dsnParams = url.Values{
 }.Encode()
 
 type Store struct {
-	db  *sql.DB
+	db *sql.DB
 }
 
 // Open creates a directory if it does not exist and opens the database inside it.
