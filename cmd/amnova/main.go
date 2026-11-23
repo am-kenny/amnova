@@ -39,6 +39,11 @@ func main() {
 	}()
 	slog.Info("store opened", "data_dir", cfg.Storage.DataDir)
 
+	if err := st.Migrate(ctx); err != nil {
+		slog.Error("migration failed", "err", err)
+		os.Exit(1)
+	}
+
 	srv, err := httpapi.Listen(cfg.Server.ListenAddr, health.NewHandler(st))
 	if err != nil {
 		slog.Error("server init failed", "err", err)
