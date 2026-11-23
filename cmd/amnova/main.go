@@ -39,7 +39,7 @@ func main() {
 	}()
 	slog.Info("store opened", "data_dir", cfg.Storage.DataDir)
 
-	srv, err := httpapi.Listen(cfg.Server.ListenAddr, health.NewHandler())
+	srv, err := httpapi.Listen(cfg.Server.ListenAddr, health.NewHandler(st))
 	if err != nil {
 		slog.Error("server init failed", "err", err)
 		os.Exit(1)
