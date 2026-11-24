@@ -27,6 +27,12 @@ jobs:
         with:
           go-version-file: go.mod
           cache: true
+          cache-dependency-path: |
+            go.sum
+            tools.sum
+
+      - name: Check generated code
+        run: go tool -modfile=tools.mod sqlc diff -f sqlc.yaml
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v9
