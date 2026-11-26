@@ -31,7 +31,7 @@ jobs:
             go.sum
             tools.sum
 
-      - name: Check generated code
+      - name: Check sqlc
         run: go tool -modfile=tools.mod sqlc diff -f sqlc.yaml
 
       - name: golangci-lint

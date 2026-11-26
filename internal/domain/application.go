@@ -56,3 +56,13 @@ func (in ApplicationInput) Validate(now time.Time) (ApplicationInput, error) {
 
 	return out, nil
 }
+
+// Application is a stored application.
+type Application struct {
+	ID        int64
+	Company   string
+	Role      string
+	Status    Status
+	AppliedAt *time.Time
+	CreatedAt time.Time
+}
