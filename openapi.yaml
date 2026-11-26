@@ -1,0 +1,104 @@
+openapi: 3.0.3
+info:
+  title: AmNova API
+  version: 0.1.0
+servers:
+  - url: /api/v1
+paths:
+  /applications:
+    get:
+      operationId: listApplications
+      summary: List applications, newest first
+      responses:
+        "200":
+          description: All applications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Application"
+        default:
+          $ref: "#/components/responses/Problem"
+    post:
+      operationId: createApplication
+      summary: Add an application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApplicationInput"
+      responses:
+        "201":
+          description: The application was added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Application"
+        "422":
+          $ref: "#/components/responses/Problem"
+        default:
+          $ref: "#/components/responses/Problem"
+components:
+  schemas:
+    Status:
+      type: string
+      enum: [saved, applied, interviewing, offer, accepted, rejected, no_response]
+    ApplicationInput:
+      type: object
+      required: [company, role, status]
+      properties:
+        company:
+          type: string
+        role:
+          type: string
+        status:
+          type: string
+          enum: [saved, applied]
+        applied_at:
+          type: string
+          format: date-time
+          description: Defaults to now when the status is applied. Must be empty when the status is saved.
+    Application:
+      type: object
+      required: [id, company, role, status, created_at]
+      properties:
+        id:
+          type: integer
+          format: int64
+        company:
+          type: string
+        role:
+          type: string
+        status:
+          $ref: "#/components/schemas/Status"
+        applied_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+    Problem:
+      description: An error in the RFC 9457 problem details format.
+      type: object
+      required: [code, title]
+      properties:
+        code:
+          type: string
+          description: Stable machine-readable error code.
+        title:
+          type: string
+        errors:
+          type: object
+          description: What is wrong with each invalid field.
+          additionalProperties:
+            type: string
+  responses:
+    Problem:
+      description: The request failed
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"

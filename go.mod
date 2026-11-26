@@ -3,11 +3,13 @@ module github.com/am-kenny/amnova
 go 1.27
 
 require (
+	github.com/oapi-codegen/runtime v1.9.1
 	github.com/pressly/goose/v3 v3.30.1
 	modernc.org/sqlite v1.63.0
 )
 
 require (
+	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/dustin/go-humanize v1.1.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/mattn/go-isatty v0.0.24 // indirect
