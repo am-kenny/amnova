@@ -34,6 +34,11 @@ jobs:
       - name: Check sqlc
         run: go tool -modfile=tools.mod sqlc diff -f sqlc.yaml
 
+      - name: Check oapi-codegen
+        run: |
+          go generate ./internal/httpapi/oapi
+          git diff --exit-code internal/httpapi/oapi
+
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v9
         with:
